@@ -1,0 +1,44 @@
+# Built artifacts
+bin/
+gen/
+out/
+build/
+.gradle/
+
+# Local configuration files
+local.properties
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+.idea/caches
+.idea/navEditor.xml
+.idea/deploymentTargetDropDown.xml
+
+# Keystore files
+*.jks
+*.keystore
+*.p12
+
+# Google Services config
+# Usually ignored in open source to avoid sharing private project IDs
+google-services.json
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Log files
+*.log
+
+# Captures
+captures/
