@@ -40,6 +40,7 @@ fun VideoSkeletonLoader() {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Brush.verticalGradient(Constants.BACKGROUND_GRADIENT))
             .background(brush)
     )
 }

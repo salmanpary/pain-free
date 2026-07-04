@@ -1,9 +1,7 @@
 package com.example.painfree.ui.components
 
+import android.util.Log
 import androidx.annotation.OptIn
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
@@ -26,7 +24,7 @@ fun VideoPlayer(
     isActive: Boolean = true
 ) {
     val context = LocalContext.current
-    var isBuffering by remember { mutableStateOf(value = true) }
+    var firstFrameRendered by remember(videoUrl) { mutableStateOf(value = false) }
     
     val exoPlayer = remember(videoUrl) {
         val cacheDataSourceFactory = VideoCache.getCacheDataSourceFactory(context)
@@ -46,11 +44,19 @@ fun VideoPlayer(
                 addListener(
                     object : Player.Listener {
                         override fun onPlaybackStateChanged(playbackState: Int) {
-                            isBuffering = playbackState == Player.STATE_BUFFERING
+                            val stateStr = when(playbackState) {
+                                Player.STATE_IDLE -> "IDLE"
+                                Player.STATE_BUFFERING -> "BUFFERING"
+                                Player.STATE_READY -> "READY"
+                                Player.STATE_ENDED -> "ENDED"
+                                else -> "UNKNOWN"
+                            }
+                            Log.d("VideoPlayer", "onPlaybackStateChanged: state=$stateStr, url=$videoUrl")
                         }
 
-                        override fun onIsPlayingChanged(isPlaying: Boolean) {
-                            if (isPlaying) isBuffering = false
+                        override fun onRenderedFirstFrame() {
+                            Log.d("VideoPlayer", "onRenderedFirstFrame: url=$videoUrl, firstFrameRendered was=$firstFrameRendered")
+                            firstFrameRendered = true
                         }
                     },
                 )
@@ -59,6 +65,7 @@ fun VideoPlayer(
 
     // Reset and Play/Pause based on activity
     LaunchedEffect(isActive) {
+        Log.d("VideoPlayer", "LaunchedEffect isActive=$isActive, url=$videoUrl")
         if (isActive) {
             exoPlayer.seekTo(0)
             exoPlayer.play()
@@ -70,29 +77,33 @@ fun VideoPlayer(
     // Properly manage Lifecycle
     DisposableEffect(exoPlayer) {
         onDispose {
+            Log.d("VideoPlayer", "onDispose player: url=$videoUrl")
             exoPlayer.release()
         }
     }
+
+    Log.d("VideoPlayer", "Render: url=$videoUrl, isActive=$isActive, firstFrameRendered=$firstFrameRendered")
 
     Box(modifier = modifier.fillMaxSize()) {
         AndroidView(
             factory = { ctx ->
                 PlayerView(ctx).apply {
-                    player = exoPlayer
                     useController = false
                     resizeMode = androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
                     setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                    setShutterBackgroundColor(android.graphics.Color.TRANSPARENT)
                     keepScreenOn = true
                 }
+            },
+            update = { playerView ->
+                playerView.player = exoPlayer
             },
             modifier = Modifier.fillMaxSize()
         )
 
-        AnimatedVisibility(
-            visible = isBuffering,
-            enter = fadeIn(),
-            exit = fadeOut(),
-        ) {
+        // Show loader immediately and hide instantly when first frame renders.
+        // No AnimatedVisibility or delays - those caused lingering overlays.
+        if (!firstFrameRendered) {
             VideoSkeletonLoader()
         }
     }

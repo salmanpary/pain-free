@@ -147,8 +147,7 @@ fun StretchDetailScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(400.dp)
-                .background(Color.Black.copy(alpha = 0.3f)),
+                .height(400.dp),
             contentAlignment = Alignment.Center
         ) {
             HorizontalPager(
