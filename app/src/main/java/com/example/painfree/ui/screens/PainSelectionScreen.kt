@@ -23,10 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import com.example.painfree.R
 import com.example.painfree.core.Constants
-import com.example.painfree.ui.components.SimpleWhatsAppButton
 
 @Composable
 fun PainSelectionScreen(onPainClick: (String) -> Unit) {
@@ -43,7 +41,6 @@ fun PainSelectionScreen(onPainClick: (String) -> Unit) {
         ) {
             Spacer(modifier = Modifier.height(64.dp))
             
-            // Static content can be wrapped in remember to avoid recomposition
             Text(
                 text = Constants.SELECTION_TITLE,
                 style = MaterialTheme.typography.displayMedium.copy(
@@ -74,7 +71,6 @@ fun PainSelectionScreen(onPainClick: (String) -> Unit) {
             
             Spacer(modifier = Modifier.height(48.dp))
 
-            // Use a stable key for each item if possible
             Constants.PAIN_ZONES.forEach { (id, zone) ->
                 key(id) {
                     PainButton(
@@ -124,8 +120,6 @@ fun PainButton(imageRes: Int, label: String, onClick: () -> Unit) {
         label = "b2"
     )
 
-    // Derived state for the gradient to avoid re-calculating the Brush object on every frame if possible
-    // though here it changes every frame, so we just use it directly.
     val blobGradient = Brush.radialGradient(
         0.0f to Constants.LOADER_COLOR.copy(alpha = if (isPressed) 0.5f else 0.2f),
         1.0f to Color.Transparent,

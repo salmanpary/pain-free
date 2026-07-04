@@ -1,5 +1,6 @@
 package com.example.painfree.ui.screens
 
+import androidx.activity.compose.BackHandler
 import android.os.Build.VERSION.SDK_INT
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
@@ -54,6 +55,8 @@ fun StretchDetailScreen(
     defaultInstructions: String,
     onBack: () -> Unit,
 ) {
+    BackHandler(onBack = onBack)
+
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val imageLoader = remember {
@@ -182,7 +185,7 @@ fun StretchDetailScreen(
                             scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
                         }
                     } else {
-                        Spacer(modifier = Modifier.size(56.dp))
+                        Spacer(modifier = Modifier.size(48.dp))
                     }
 
                     if (pagerState.currentPage < (displayImages.size - 1)) {
@@ -190,7 +193,7 @@ fun StretchDetailScreen(
                             scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
                         }
                     } else {
-                        Spacer(modifier = Modifier.size(56.dp))
+                        Spacer(modifier = Modifier.size(48.dp))
                     }
                 }
             }
