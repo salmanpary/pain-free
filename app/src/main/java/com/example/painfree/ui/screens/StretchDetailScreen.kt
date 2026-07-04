@@ -43,6 +43,8 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.example.painfree.core.Constants
 import com.example.painfree.ui.components.NavigationButton
+import com.example.painfree.ui.components.VideoPlayer
+import com.example.painfree.ui.components.VideoSkeletonLoader
 import kotlinx.coroutines.launch
 
 @Composable
@@ -111,67 +113,89 @@ fun StretchDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 24.dp, vertical = 24.dp),
+            .padding(vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             BlobBackButton(onClick = onBack)
+            
+            Spacer(modifier = Modifier.width(16.dp))
+            
+            Text(
+                text = currentTitle,
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    fontWeight = FontWeight.ExtraBold,
+                    fontFamily = FontFamily.SansSerif,
+                    letterSpacing = (-0.5).sp
+                ),
+                color = Color.White,
+                textAlign = TextAlign.Start,
+                modifier = Modifier.weight(1f)
+            )
         }
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        Text(
-            text = currentTitle,
-            style = MaterialTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.SansSerif
-            ),
-            color = Color.White,
-            textAlign = TextAlign.Center
-        )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(56.dp))
 
+        // Media Container
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(350.dp),
+                .height(400.dp)
+                .background(Color.Black.copy(alpha = 0.3f)),
             contentAlignment = Alignment.Center
         ) {
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize(),
-                pageSpacing = 16.dp,
+                pageSpacing = 0.dp,
                 beyondViewportPageCount = 1
             ) { page ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 4.dp),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.05f)),
-                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.1f)),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = rememberAsyncImagePainter(
+                    val data = displayImages[page]
+                    if ((data is String) && data.endsWith(".mp4", ignoreCase = true)) {
+                        VideoPlayer(
+                            videoUrl = data,
+                            modifier = Modifier.fillMaxSize(),
+                            isActive = pagerState.currentPage == page
+                        )
+                    } else {
+                        val painter = rememberAsyncImagePainter(
                             ImageRequest.Builder(context)
-                                .data(data = displayImages[page])
+                                .data(data = data)
                                 .crossfade(enable = true)
                                 .memoryCachePolicy(CachePolicy.ENABLED)
                                 .diskCachePolicy(CachePolicy.ENABLED)
                                 .build(),
                             imageLoader = imageLoader
-                        ),
-                        contentDescription = "$currentTitle Page $page",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Fit
-                    )
+                        )
+                        
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Image(
+                                painter = painter,
+                                contentDescription = "$currentTitle Page $page",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                            
+                            if (painter.state is coil.compose.AsyncImagePainter.State.Loading) {
+                                VideoSkeletonLoader()
+                            }
+                        }
+                    }
                 }
             }
 
+            // Floating Navigation Arrows
             if (displayImages.size > 1) {
                 Row(
                     modifier = Modifier
@@ -199,17 +223,20 @@ fun StretchDetailScreen(
             }
         }
 
+        // Indicator Dots (Distinctly separated from media)
         if (displayImages.size > 1) {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(48.dp))
             Row(
                 horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 repeat(displayImages.size) { iteration ->
                     val isSelected = pagerState.currentPage == iteration
                     val color = if (isSelected) Color(0xFF60A5FA) else Color.White.copy(alpha = 0.2f)
-                    val width = if (isSelected) 28.dp else 8.dp
+                    val width = if (isSelected) 32.dp else 8.dp
                     
                     Box(
                         modifier = Modifier
@@ -217,18 +244,20 @@ fun StretchDetailScreen(
                             .clip(CircleShape)
                             .background(color)
                             .width(width)
-                            .height(8.dp)
+                            .height(6.dp)
                             .animateContentSize()
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(48.dp))
 
-        InstructionsSection(currentInstructions)
+        Box(modifier = Modifier.padding(horizontal = 20.dp)) {
+            InstructionsSection(currentInstructions)
+        }
         
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(140.dp))
     }
 }
 
@@ -332,7 +361,8 @@ fun InstructionItem(text: String) {
                     lineHeight = 24.sp,
                     fontWeight = FontWeight.Medium
                 ),
-                color = Color.White.copy(alpha = 0.85f)
+                color = Color.White.copy(alpha = 0.85f),
+                modifier = Modifier.weight(1f)
             )
         } else {
             Box(
@@ -347,7 +377,8 @@ fun InstructionItem(text: String) {
                     lineHeight = 24.sp,
                     fontWeight = FontWeight.Medium
                 ),
-                color = Color.White.copy(alpha = 0.85f)
+                color = Color.White.copy(alpha = 0.85f),
+                modifier = Modifier.weight(1f)
             )
         }
     }

@@ -48,30 +48,30 @@ fun SimpleWhatsAppButton(modifier: Modifier = Modifier) {
         },
         interactionSource = interactionSource,
         modifier = modifier
-            .widthIn(max = 260.dp)
-            .height(50.dp),
-        shape = RoundedCornerShape(25.dp),
+            .widthIn(max = 280.dp)
+            .height(56.dp),
+        shape = RoundedCornerShape(28.dp),
         color = Color.Transparent,
-        shadowElevation = if (isPressed) 2.dp else 6.dp,
+        shadowElevation = if (isPressed) 2.dp else 12.dp,
     ) {
         Box(
             modifier = Modifier
                 .background(glossyGradient)
                 .border(
                     BorderStroke(1.5.dp, Color.White.copy(alpha = 0.3f)),
-                    RoundedCornerShape(25.dp),
+                    RoundedCornerShape(28.dp),
                 ),
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(20.dp)
+                    .height(30.dp)
                     .padding(horizontal = 10.dp, vertical = 2.dp)
                     .background(
                         Brush.verticalGradient(
                             listOf(Color.White.copy(alpha = 0.2f), Color.Transparent),
                         ),
-                        RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+                        RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
                     ),
             )
 
@@ -83,16 +83,16 @@ fun SimpleWhatsAppButton(modifier: Modifier = Modifier) {
                 Icon(
                     painter = painterResource(id = R.drawable.whatsapp),
                     contentDescription = null,
-                    modifier = Modifier.size(28.dp),
+                    modifier = Modifier.size(32.dp),
                     tint = Color.White,
                 )
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     Constants.WHATSAPP_BUTTON_TEXT,
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
-                        shadow = Shadow(Color.Black.copy(alpha = 0.3f), Offset(1f, 1f), 3f),
+                        fontSize = 16.sp,
+                        shadow = Shadow(Color.Black.copy(alpha = 0.3f), Offset(2f, 2f), 4f),
                     ),
                     color = Color.White,
                 )
