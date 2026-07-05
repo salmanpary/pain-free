@@ -61,11 +61,12 @@ class MainActivity : ComponentActivity() {
                                 gifUrls = data.gifUrls,
                                 instructions = data.instructions,
                                 pageTitles = data.pageTitles,
+                                aspectRatios = data.aspectRatios,
                                 fallbackRes = fallbackRes,
                             )
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            currentScreen = Screen.StretchDetail(painId, "Recovery", emptyList(), emptyList(), emptyList(), fallbackRes)
+                            currentScreen = Screen.StretchDetail(painId, "Recovery", emptyList(), emptyList(), emptyList(), emptyList(), fallbackRes)
                         } finally {
                             isLoading = false
                         }
@@ -93,6 +94,7 @@ class MainActivity : ComponentActivity() {
                                     fallbackRes = screen.fallbackRes,
                                     instructionsList = screen.instructions,
                                     pageTitles = screen.pageTitles,
+                                    aspectRatios = screen.aspectRatios,
                                     defaultInstructions = defaultInstructions,
                                 ) {
                                     currentScreen = Screen.Selection

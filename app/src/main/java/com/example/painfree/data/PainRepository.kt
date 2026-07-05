@@ -12,7 +12,8 @@ data class PainData(
     val mainTitle: String,
     val gifUrls: List<String>,
     val instructions: List<String>,
-    val pageTitles: List<String>
+    val pageTitles: List<String>,
+    val aspectRatios: List<Float?>
 )
 
 /**
@@ -23,7 +24,8 @@ data class GifEntry(
     val url: String? = null,
     val instructions: List<String>? = null,
     val name: String? = null,
-    val title: String? = null
+    val title: String? = null,
+    val dimensions: String? = null
 )
 
 data class PainDoc(
@@ -52,7 +54,22 @@ class PainRepository {
         } ?: emptyList()
 
         val pageTitles = doc?.gifs?.map { it.name ?: it.title ?: "" } ?: emptyList()
+
+        val aspectRatios = doc?.gifs?.map { entry ->
+            entry.dimensions?.let { dims ->
+                try {
+                    val parts = dims.split("x")
+                    if (parts.size == 2) {
+                        val w = parts[0].trim().toFloat()
+                        val h = parts[1].trim().toFloat()
+                        if (h > 0) w / h else null
+                    } else null
+                } catch (_: Exception) {
+                    null
+                }
+            }
+        } ?: emptyList()
         
-        return PainData(mainTitle, gifUrls, instructionsList, pageTitles)
+        return PainData(mainTitle, gifUrls, instructionsList, pageTitles, aspectRatios)
     }
 }

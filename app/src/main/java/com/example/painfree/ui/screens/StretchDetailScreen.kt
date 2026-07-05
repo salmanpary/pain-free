@@ -54,6 +54,7 @@ fun StretchDetailScreen(
     fallbackRes: Int,
     instructionsList: List<String>,
     pageTitles: List<String>,
+    aspectRatios: List<Float?>,
     defaultInstructions: String,
     onBack: () -> Unit,
 ) {
@@ -89,6 +90,9 @@ fun StretchDetailScreen(
     }
     val pagerState = rememberPagerState { displayImages.size }
     
+    // Track aspect ratio for each page dynamically
+    val detectedAspectRatios = remember { mutableStateMapOf<Int, Float>() }
+
     val currentInstructions by remember {
         derivedStateOf {
             if ((instructionsList.size > pagerState.currentPage) && instructionsList[pagerState.currentPage].isNotBlank()) {
@@ -114,6 +118,7 @@ fun StretchDetailScreen(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(vertical = 16.dp),
+        
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(24.dp))
@@ -141,31 +146,59 @@ fun StretchDetailScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(56.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Dynamic Spacing Logic
+        val currentRatio = detectedAspectRatios[pagerState.currentPage] 
+            ?: (if (aspectRatios.size > pagerState.currentPage) aspectRatios[pagerState.currentPage] else null) 
+            ?: (4f / 3f)
+            
+        // Reduce gaps for tall videos to save screen real estate
+        val dynamicGap = if (currentRatio < 1.1f) 20.dp else 32.dp
 
         // Media Container
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(400.dp),
+                .padding(horizontal = 12.dp)
+                .sizeIn(maxHeight = 380.dp)
+                .aspectRatio(currentRatio)
+                .clip(RoundedCornerShape(24.dp)),
             contentAlignment = Alignment.Center
         ) {
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize(),
-                pageSpacing = 0.dp,
+                pageSpacing = 16.dp,
                 beyondViewportPageCount = 1
             ) { page ->
-                Box(
+                val data = displayImages[page]
+                val ratio = detectedAspectRatios[page] 
+                    ?: (if (aspectRatios.size > page) aspectRatios[page] else null) 
+                    ?: (4f / 3f)
+
+                Surface(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    shape = RoundedCornerShape(24.dp),
+                    color = Color.Black.copy(alpha = 0.2f),
+                    border = BorderStroke(
+                        1.dp,
+                        Brush.linearGradient(
+                            listOf(
+                                Color.White.copy(alpha = 0.3f),
+                                Color.White.copy(alpha = 0.05f)
+                            )
+                        )
+                    )
                 ) {
-                    val data = displayImages[page]
                     if ((data is String) && data.endsWith(".mp4", ignoreCase = true)) {
                         VideoPlayer(
                             videoUrl = data,
                             modifier = Modifier.fillMaxSize(),
-                            isActive = pagerState.currentPage == page
+                            isActive = pagerState.currentPage == page,
+                            onVideoSizeKnown = { detectedRatio ->
+                                detectedAspectRatios[page] = detectedRatio
+                            }
                         )
                     } else {
                         val painter = rememberAsyncImagePainter(
@@ -194,12 +227,12 @@ fun StretchDetailScreen(
                 }
             }
 
-            // Floating Navigation Arrows
+            // Floating Navigation Arrows (Inside the dynamic box)
             if (displayImages.size > 1) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 12.dp),
+                        .padding(horizontal = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -208,7 +241,7 @@ fun StretchDetailScreen(
                             scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
                         }
                     } else {
-                        Spacer(modifier = Modifier.size(48.dp))
+                        Spacer(modifier = Modifier.size(40.dp))
                     }
 
                     if (pagerState.currentPage < (displayImages.size - 1)) {
@@ -216,15 +249,15 @@ fun StretchDetailScreen(
                             scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
                         }
                     } else {
-                        Spacer(modifier = Modifier.size(48.dp))
+                        Spacer(modifier = Modifier.size(40.dp))
                     }
                 }
             }
         }
 
-        // Indicator Dots (Distinctly separated from media)
+        // Indicator Dots (Dynamic Spacing)
         if (displayImages.size > 1) {
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(dynamicGap))
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
@@ -235,7 +268,12 @@ fun StretchDetailScreen(
                 repeat(displayImages.size) { iteration ->
                     val isSelected = pagerState.currentPage == iteration
                     val color = if (isSelected) Color(0xFF60A5FA) else Color.White.copy(alpha = 0.2f)
-                    val width = if (isSelected) 32.dp else 8.dp
+                    
+                    val width by animateDpAsState(
+                        targetValue = if (isSelected) 32.dp else 8.dp,
+                        animationSpec = tween(300),
+                        label = "dotWidth"
+                    )
                     
                     Box(
                         modifier = Modifier
@@ -244,13 +282,12 @@ fun StretchDetailScreen(
                             .background(color)
                             .width(width)
                             .height(6.dp)
-                            .animateContentSize()
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(dynamicGap))
 
         Box(modifier = Modifier.padding(horizontal = 20.dp)) {
             InstructionsSection(currentInstructions)

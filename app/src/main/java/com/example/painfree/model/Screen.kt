@@ -9,6 +9,7 @@ sealed class Screen {
         val gifUrls: List<String>,
         val instructions: List<String>,
         val pageTitles: List<String>,
+        val aspectRatios: List<Float?>,
         val fallbackRes: Int
     ) : Screen()
 }
