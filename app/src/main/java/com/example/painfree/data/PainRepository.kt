@@ -47,28 +47,34 @@ class PainRepository {
         val mainTitle = doc?.title ?: doc?.name 
             ?: (Constants.PAIN_FALLBACK_TITLES[painId] ?: "Recovery Pain")
 
-        val gifUrls = doc?.gifs?.mapNotNull { it.url } ?: emptyList()
-        
-        val instructionsList = doc?.gifs?.map { entry ->
-            entry.instructions?.mapIndexed { index, s -> "${index + 1}. $s" }?.joinToString("\n") ?: ""
-        } ?: emptyList()
+        val gifUrls = mutableListOf<String>()
+        val instructionsList = mutableListOf<String>()
+        val pageTitles = mutableListOf<String>()
+        val aspectRatios = mutableListOf<Float?>()
 
-        val pageTitles = doc?.gifs?.map { it.name ?: it.title ?: "" } ?: emptyList()
-
-        val aspectRatios = doc?.gifs?.map { entry ->
-            entry.dimensions?.let { dims ->
-                try {
-                    val parts = dims.split("x")
-                    if (parts.size == 2) {
-                        val w = parts[0].trim().toFloat()
-                        val h = parts[1].trim().toFloat()
-                        if (h > 0) w / h else null
-                    } else null
-                } catch (_: Exception) {
-                    null
+        doc?.gifs?.forEach { entry ->
+            val url = entry.url
+            if (!url.isNullOrBlank()) {
+                gifUrls.add(url)
+                val instStr = entry.instructions?.mapIndexed { index, s -> "${index + 1}. $s" }?.joinToString("\n") ?: ""
+                instructionsList.add(instStr)
+                pageTitles.add(entry.name ?: entry.title ?: "")
+                
+                val ratio = entry.dimensions?.let { dims ->
+                    try {
+                        val parts = dims.lowercase().split("x")
+                        if (parts.size == 2) {
+                            val w = parts[0].trim().toFloat()
+                            val h = parts[1].trim().toFloat()
+                            if (h > 0f) w / h else null
+                        } else null
+                    } catch (e: Exception) {
+                        null
+                    }
                 }
+                aspectRatios.add(ratio)
             }
-        } ?: emptyList()
+        }
         
         return PainData(mainTitle, gifUrls, instructionsList, pageTitles, aspectRatios)
     }
