@@ -3,7 +3,7 @@ package com.example.painfree.model
 sealed class Screen {
     object Selection : Screen()
     
-    data class StretchDetail(
+    data class StretchDetailState(
         val painId: String,
         val mainTitle: String,
         val gifUrls: List<String>,

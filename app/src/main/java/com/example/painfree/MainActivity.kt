@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                     scope.launch {
                         try {
                             val data = repository.getPainDetails(painId)
-                            currentScreen = Screen.StretchDetail(
+                            currentScreen = Screen.StretchDetailState(
                                 painId = painId,
                                 mainTitle = data.mainTitle,
                                 gifUrls = data.gifUrls,
@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
                             )
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            currentScreen = Screen.StretchDetail(painId, "Recovery", emptyList(), emptyList(), emptyList(), emptyList(), fallbackRes)
+                            currentScreen = Screen.StretchDetailState(painId, "Recovery", emptyList(), emptyList(), emptyList(), emptyList(), fallbackRes)
                         } finally {
                             isLoading = false
                         }
@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
                                     navigateToPain(zone.docId, zone.fallbackRes)
                                 }
                             }
-                            is Screen.StretchDetail -> {
+                            is Screen.StretchDetailState -> {
                                 val defaultInstructions = Constants.DEFAULT_INSTRUCTIONS[screen.painId] 
                                     ?: Constants.RHOMBOID_DEFAULT_INSTRUCTIONS
                                 
