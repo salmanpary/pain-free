@@ -1,6 +1,7 @@
 package com.example.painfree.ui.components
 
 import android.content.Intent
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import com.example.painfree.R
 import com.example.painfree.core.Constants
+import com.example.painfree.ui.theme.*
 
 @Composable
 fun SimpleWhatsAppButton(modifier: Modifier = Modifier) {
@@ -33,11 +35,29 @@ fun SimpleWhatsAppButton(modifier: Modifier = Modifier) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
-    val glossyGradient = Brush.verticalGradient(
-        colors = if (isPressed) 
-            Constants.WHATSAPP_GRADIENT.reversed()
-        else 
-            Constants.WHATSAPP_GRADIENT,
+    val infiniteTransition = rememberInfiniteTransition(label = "glance")
+    val glanceOffset by infiniteTransition.animateFloat(
+        initialValue = -500f,
+        targetValue = 1000f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "glanceAnim"
+    )
+
+    val buttonBackground = Brush.linearGradient(
+        colors = Constants.ACCENT_GRADIENT
+    )
+
+    val glanceBrush = Brush.linearGradient(
+        colors = listOf(
+            Color.Transparent,
+            Color.White.copy(alpha = 0.3f),
+            Color.Transparent,
+        ),
+        start = Offset(glanceOffset, 0f),
+        end = Offset(glanceOffset + 200f, 200f)
     )
 
     Surface(
@@ -52,29 +72,22 @@ fun SimpleWhatsAppButton(modifier: Modifier = Modifier) {
             .height(56.dp),
         shape = RoundedCornerShape(28.dp),
         color = Color.Transparent,
-        shadowElevation = if (isPressed) 2.dp else 12.dp,
+        shadowElevation = 8.dp,
     ) {
         Box(
             modifier = Modifier
-                .background(glossyGradient)
+                .background(buttonBackground)
+                .background(glanceBrush)
                 .border(
-                    BorderStroke(1.5.dp, Color.White.copy(alpha = 0.3f)),
+                    BorderStroke(
+                        1.dp, 
+                        Brush.linearGradient(
+                            listOf(Color.White.copy(alpha = 0.4f), Color.Transparent)
+                        )
+                    ),
                     RoundedCornerShape(28.dp),
                 ),
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(30.dp)
-                    .padding(horizontal = 10.dp, vertical = 2.dp)
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(Color.White.copy(alpha = 0.2f), Color.Transparent),
-                        ),
-                        RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
-                    ),
-            )
-
             Row(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -84,7 +97,7 @@ fun SimpleWhatsAppButton(modifier: Modifier = Modifier) {
                     painter = painterResource(id = R.drawable.whatsapp),
                     contentDescription = null,
                     modifier = Modifier.size(32.dp),
-                    tint = Color.White,
+                    tint = CreamyWhite,
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
@@ -92,9 +105,8 @@ fun SimpleWhatsAppButton(modifier: Modifier = Modifier) {
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        shadow = Shadow(Color.Black.copy(alpha = 0.3f), Offset(2f, 2f), 4f),
                     ),
-                    color = Color.White,
+                    color = CreamyWhite,
                 )
             }
         }

@@ -47,6 +47,7 @@ import com.example.painfree.core.Constants
 import com.example.painfree.ui.components.NavigationButton
 import com.example.painfree.ui.components.VideoPlayer
 import com.example.painfree.ui.components.VideoSkeletonLoader
+import com.example.painfree.ui.theme.*
 import kotlinx.coroutines.launch
 
 @Composable
@@ -180,7 +181,7 @@ fun StretchDetailScreen(
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = (-0.5).sp
                 ),
-                color = Color.White,
+                color = EspressoBrown,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.weight(1f)
             )
@@ -189,90 +190,99 @@ fun StretchDetailScreen(
         Spacer(modifier = Modifier.height(titleToVideoGap))
 
         // Media Container (Dynamic height based on video ratio)
-        Box(
+        Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp)
-                .aspectRatio(displayRatio)
-                .sizeIn(maxHeight = maxMediaHeight),
-            contentAlignment = Alignment.Center
+                .padding(horizontal = 12.dp),
+            shape = RoundedCornerShape(24.dp),
+            color = Color.Transparent,
+            shadowElevation = 20.dp,
+            tonalElevation = 8.dp
         ) {
-            VideoSkeletonLoader()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(displayRatio)
+                    .sizeIn(maxHeight = maxMediaHeight),
+                contentAlignment = Alignment.Center
+            ) {
+                VideoSkeletonLoader()
 
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize(),
-                pageSpacing = 0.dp,
-                beyondViewportPageCount = 1
-            ) { page ->
-                val data = displayImages[page]
-
-                Box(
+                HorizontalPager(
+                    state = pagerState,
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if ((data is String) && data.endsWith(".mp4", ignoreCase = true)) {
-                        val pageRatio = (if (aspectRatios.size > page) aspectRatios[page] else null)
-                            ?: detectedAspectRatios[page]
-                        VideoPlayer(
-                            videoUrl = data,
-                            modifier = Modifier.fillMaxSize(),
-                            isActive = pagerState.currentPage == page,
-                            expectedAspectRatio = pageRatio,
-                            onVideoSizeKnown = { detectedRatio ->
-                                detectedAspectRatios[page] = detectedRatio
-                            }
-                        )
-                    } else {
-                        val painter = rememberAsyncImagePainter(
-                            ImageRequest.Builder(context)
-                                .data(data = data)
-                                .crossfade(enable = true)
-                                .memoryCachePolicy(CachePolicy.ENABLED)
-                                .diskCachePolicy(CachePolicy.ENABLED)
-                                .build(),
-                            imageLoader = imageLoader
-                        )
+                    pageSpacing = 0.dp,
+                    beyondViewportPageCount = 1
+                ) { page ->
+                    val data = displayImages[page]
 
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Image(
-                                painter = painter,
-                                contentDescription = "$currentTitle Page $page",
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if ((data is String) && data.endsWith(".mp4", ignoreCase = true)) {
+                            val pageRatio = (if (aspectRatios.size > page) aspectRatios[page] else null)
+                                ?: detectedAspectRatios[page]
+                            VideoPlayer(
+                                videoUrl = data,
                                 modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
+                                isActive = pagerState.currentPage == page,
+                                expectedAspectRatio = pageRatio,
+                                onVideoSizeKnown = { detectedRatio ->
+                                    detectedAspectRatios[page] = detectedRatio
+                                }
+                            )
+                        } else {
+                            val painter = rememberAsyncImagePainter(
+                                ImageRequest.Builder(context)
+                                    .data(data = data)
+                                    .crossfade(enable = true)
+                                    .memoryCachePolicy(CachePolicy.ENABLED)
+                                    .diskCachePolicy(CachePolicy.ENABLED)
+                                    .build(),
+                                imageLoader = imageLoader
                             )
 
-                            if (painter.state is coil.compose.AsyncImagePainter.State.Loading) {
-                                VideoSkeletonLoader()
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Image(
+                                    painter = painter,
+                                    contentDescription = "$currentTitle Page $page",
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
+
+                                if (painter.state is coil.compose.AsyncImagePainter.State.Loading) {
+                                    VideoSkeletonLoader()
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            // Floating Navigation Arrows
-            if (displayImages.size > 1) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    if (pagerState.currentPage > 0) {
-                        NavigationButton(icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft) {
-                            scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
+                // Floating Navigation Arrows
+                if (displayImages.size > 1) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        if (pagerState.currentPage > 0) {
+                            NavigationButton(icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft) {
+                                scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
+                            }
+                        } else {
+                            Spacer(modifier = Modifier.size(40.dp))
                         }
-                    } else {
-                        Spacer(modifier = Modifier.size(40.dp))
-                    }
 
-                    if (pagerState.currentPage < (displayImages.size - 1)) {
-                        NavigationButton(icon = Icons.AutoMirrored.Filled.KeyboardArrowRight) {
-                            scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+                        if (pagerState.currentPage < (displayImages.size - 1)) {
+                            NavigationButton(icon = Icons.AutoMirrored.Filled.KeyboardArrowRight) {
+                                scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+                            }
+                        } else {
+                            Spacer(modifier = Modifier.size(40.dp))
                         }
-                    } else {
-                        Spacer(modifier = Modifier.size(40.dp))
                     }
                 }
             }
@@ -290,7 +300,7 @@ fun StretchDetailScreen(
             ) {
                 repeat(displayImages.size) { iteration ->
                     val isSelected = pagerState.currentPage == iteration
-                    val color = if (isSelected) Color(0xFF60A5FA) else Color.White.copy(alpha = 0.2f)
+                    val color = if (isSelected) CoralPink else EspressoBrown.copy(alpha = 0.2f)
                     
                     val width by animateDpAsState(
                         targetValue = if (isSelected) 32.dp else 8.dp,
@@ -327,14 +337,14 @@ fun InstructionsSection(instructions: String) {
             .fillMaxWidth()
             .padding(bottom = 16.dp),
         shape = RoundedCornerShape(32.dp),
-        color = Color.White.copy(alpha = 0.04f),
+        color = LightGrey,
         border = BorderStroke(
             1.dp,
             Brush.linearGradient(
                 listOf(
-                    Color.White.copy(alpha = 0.2f),
+                    CoralPink.copy(alpha = 0.2f),
                     Color.Transparent,
-                    Color.White.copy(alpha = 0.1f),
+                    CoralPink.copy(alpha = 0.1f),
                 )
             )
         ),
@@ -351,13 +361,13 @@ fun InstructionsSection(instructions: String) {
                 Box(
                     modifier = Modifier
                         .size(36.dp)
-                        .background(Color(0xFF60A5FA).copy(alpha = 0.15f), CircleShape),
+                        .background(CoralPink.copy(alpha = 0.15f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.Info,
                         contentDescription = null,
-                        tint = Color(0xFF60A5FA),
+                        tint = CoralPink,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -368,7 +378,7 @@ fun InstructionsSection(instructions: String) {
                         fontWeight = FontWeight.ExtraBold,
                         letterSpacing = 0.5.sp
                     ),
-                    color = Color.White
+                    color = EspressoBrown
                 )
             }
 
@@ -409,7 +419,7 @@ fun InstructionItem(text: String) {
                         fontWeight = FontWeight.Black,
                         fontSize = 12.sp
                     ),
-                    color = Color.White,
+                    color = CreamyWhite,
                     textAlign = TextAlign.Center
                 )
             }
@@ -420,14 +430,14 @@ fun InstructionItem(text: String) {
                     lineHeight = 24.sp,
                     fontWeight = FontWeight.Medium
                 ),
-                color = Color.White.copy(alpha = 0.85f),
+                color = EspressoBrown,
                 modifier = Modifier.weight(1f)
             )
         } else {
             Box(
                 modifier = Modifier
                     .size(8.dp)
-                    .background(Color(0xFF60A5FA), CircleShape)
+                    .background(CoralPink, CircleShape)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
@@ -436,7 +446,7 @@ fun InstructionItem(text: String) {
                     lineHeight = 24.sp,
                     fontWeight = FontWeight.Medium
                 ),
-                color = Color.White.copy(alpha = 0.85f),
+                color = EspressoBrown,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -455,21 +465,44 @@ fun BlobBackButton(onClick: () -> Unit) {
     )
 
     val infiniteTransition = rememberInfiniteTransition(label = "backBlob")
-    val blobOffset1 by infiniteTransition.animateFloat(
+    val gradientOffset by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = 200f,
+        targetValue = 1000f,
         animationSpec = infiniteRepeatable(
             animation = tween(4000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse,
+            repeatMode = RepeatMode.Reverse
         ),
-        label = "backB1",
+        label = "backGradientOffset"
     )
 
-    val blobGradient = Brush.radialGradient(
-        0.0f to Color(0xFFC084FC).copy(alpha = 0.6f),
-        1.0f to Color.Transparent,
-        center = Offset(blobOffset1, blobOffset1),
-        radius = 100f
+    val glanceOffset by infiniteTransition.animateFloat(
+        initialValue = -300f,
+        targetValue = 900f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "backGlance"
+    )
+
+    val animatedBorder = Brush.linearGradient(
+        colors = Constants.ACCENT_GRADIENT,
+        start = Offset(gradientOffset, 0f),
+        end = Offset(gradientOffset + 500f, 500f)
+    )
+
+    val backgroundGradient = Brush.linearGradient(
+        colors = listOf(CoralPink.copy(alpha = 0.5f), GoldenYellow.copy(alpha = 0.3f))
+    )
+
+    val glanceBrush = Brush.linearGradient(
+        colors = listOf(
+            Color.Transparent,
+            Color.White.copy(alpha = 0.4f),
+            Color.Transparent,
+        ),
+        start = Offset(glanceOffset, 0f),
+        end = Offset(glanceOffset + 150f, 150f)
     )
 
     Surface(
@@ -479,11 +512,14 @@ fun BlobBackButton(onClick: () -> Unit) {
             .size(56.dp)
             .scale(scale),
         shape = CircleShape,
-        color = Color.White.copy(alpha = 0.15f),
-        border = BorderStroke(1.5.dp, Brush.linearGradient(listOf(Color(0xFF60A5FA), Color(0xFFC084FC)))),
+        color = Color.Transparent,
+        border = BorderStroke(2.dp, animatedBorder),
     ) {
-        Box(modifier = Modifier.fillMaxSize().background(blobGradient), contentAlignment = Alignment.Center) {
-            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White, modifier = Modifier.size(28.dp))
+        Box(
+            modifier = Modifier.fillMaxSize().background(backgroundGradient).background(glanceBrush), 
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = EspressoBrown, modifier = Modifier.size(28.dp))
         }
     }
 }

@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.painfree.R
 import com.example.painfree.core.Constants
+import com.example.painfree.ui.theme.*
 
 @Composable
 fun PainSelectionScreen(onPainClick: (String) -> Unit) {
@@ -52,7 +53,7 @@ fun PainSelectionScreen(onPainClick: (String) -> Unit) {
                         colors = Constants.ACCENT_GRADIENT,
                     ),
                     shadow = Shadow(
-                        color = Color.Black.copy(alpha = 0.5f),
+                        color = EspressoBrown.copy(alpha = 0.2f),
                         offset = Offset(4f, 4f),
                         blurRadius = 8f,
                     ),
@@ -65,7 +66,7 @@ fun PainSelectionScreen(onPainClick: (String) -> Unit) {
             Text(
                 text = Constants.SELECTION_SUBTITLE,
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.White.copy(alpha = 0.7f),
+                color = EspressoBrown.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center
             )
             
@@ -100,38 +101,22 @@ fun PainButton(imageRes: Int, label: String, onClick: () -> Unit) {
         label = "scale"
     )
     
-    val infiniteTransition = rememberInfiniteTransition(label = "blob")
-    val blobOffset1 by infiniteTransition.animateFloat(
+    val infiniteTransition = rememberInfiniteTransition(label = "painButton")
+    val gradientOffset by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1000f,
         animationSpec = infiniteRepeatable(
-            animation = tween(12000, easing = LinearEasing),
+            animation = tween(4000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
         ),
-        label = "b1"
-    )
-    val blobOffset2 by infiniteTransition.animateFloat(
-        initialValue = 1000f,
-        targetValue = 0f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(15000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "b2"
+        label = "gradientOffset"
     )
 
-    val blobGradient = Brush.radialGradient(
-        0.0f to Constants.LOADER_COLOR.copy(alpha = if (isPressed) 0.5f else 0.2f),
-        1.0f to Color.Transparent,
-        center = Offset(blobOffset1, blobOffset2),
-        radius = 400f
+    val animatedBorder = Brush.linearGradient(
+        colors = Constants.ACCENT_GRADIENT,
+        start = Offset(gradientOffset, 0f),
+        end = Offset(gradientOffset + 500f, 500f)
     )
-
-    val gradientBorder = remember {
-        Brush.linearGradient(
-            colors = Constants.ACCENT_GRADIENT
-        )
-    }
 
     Surface(
         onClick = onClick,
@@ -141,19 +126,17 @@ fun PainButton(imageRes: Int, label: String, onClick: () -> Unit) {
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale
-                clip = true
             },
         shape = RoundedCornerShape(32.dp),
-        color = Color.Transparent,
-        border = BorderStroke(1.5.dp, gradientBorder),
-        shadowElevation = 0.dp,
+        color = LightGrey,
+        border = BorderStroke(2.dp, animatedBorder),
+        shadowElevation = 24.dp, // Prominent Drop Shadow
         tonalElevation = 0.dp
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(32.dp))
-                .background(blobGradient)
         ) {
             Column(
                 modifier = Modifier.fillMaxSize().padding(20.dp),
@@ -182,7 +165,7 @@ fun PainButton(imageRes: Int, label: String, onClick: () -> Unit) {
                         fontFamily = FontFamily.SansSerif,
                         letterSpacing = 0.sp
                     ),
-                    color = Color.White
+                    color = EspressoBrown
                 )
             }
         }

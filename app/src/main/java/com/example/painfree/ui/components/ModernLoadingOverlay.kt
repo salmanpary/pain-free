@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.painfree.core.Constants
+import com.example.painfree.ui.theme.*
 
 @Composable
 fun ModernLoadingOverlay(isLoading: Boolean) {
@@ -28,7 +29,7 @@ fun ModernLoadingOverlay(isLoading: Boolean) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.75f)),
+                .background(PeachBg.copy(alpha = 0.95f)),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -39,15 +40,15 @@ fun ModernLoadingOverlay(isLoading: Boolean) {
                     Surface(
                         modifier = Modifier.size(90.dp),
                         shape = CircleShape,
-                        color = Color(0xFF60A5FA).copy(alpha = 0.1f),
-                        border = BorderStroke(1.dp, Color(0xFF60A5FA).copy(alpha = 0.2f))
+                        color = CoralPink.copy(alpha = 0.1f),
+                        border = BorderStroke(1.dp, CoralPink.copy(alpha = 0.2f))
                     ) {}
                     
                     CircularProgressIndicator(
                         modifier = Modifier.size(60.dp),
                         color = Constants.LOADER_COLOR,
                         strokeWidth = 4.dp,
-                        trackColor = Color.White.copy(alpha = 0.1f)
+                        trackColor = GoldenYellow.copy(alpha = 0.2f)
                     )
                 }
                 
@@ -59,7 +60,7 @@ fun ModernLoadingOverlay(isLoading: Boolean) {
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.SansSerif
                     ),
-                    color = Color.White,
+                    color = EspressoBrown,
                     textAlign = TextAlign.Center
                 )
                 
@@ -68,7 +69,7 @@ fun ModernLoadingOverlay(isLoading: Boolean) {
                 Text(
                     text = Constants.LOADING_SUBTITLE,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.White.copy(alpha = 0.5f),
+                    color = EspressoBrown.copy(alpha = 0.6f),
                     textAlign = TextAlign.Center
                 )
             }

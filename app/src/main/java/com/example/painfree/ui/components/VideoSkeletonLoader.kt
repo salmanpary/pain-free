@@ -14,13 +14,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.painfree.core.Constants
+import com.example.painfree.ui.theme.*
 
 @Composable
 fun VideoSkeletonLoader() {
     val shimmerColors = listOf(
-        Color(0xFF1E1B4B).copy(alpha = 0.4f), // Indigo base
-        Constants.LOADER_COLOR.copy(alpha = 0.25f), // Sky blue highlight
-        Color(0xFF1E1B4B).copy(alpha = 0.4f),
+        PeachBg,
+        CoralPink.copy(alpha = 0.2f),
+        PeachBg,
     )
 
     val transition = rememberInfiniteTransition(label = "shimmer")

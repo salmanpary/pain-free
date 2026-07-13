@@ -27,7 +27,7 @@ import com.example.painfree.ui.components.ModernLoadingOverlay
 import com.example.painfree.ui.components.SimpleWhatsAppButton
 import com.example.painfree.ui.screens.PainSelectionScreen
 import com.example.painfree.ui.screens.StretchDetailScreen
-import com.example.painfree.ui.theme.PainFreeTheme
+import com.example.painfree.ui.theme.*
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = Color(0xFF020617),
+                    color = PeachBg,
                 ) {
                     Box(modifier = Modifier.fillMaxSize().background(backgroundGradient)) {
                         when (val screen = currentScreen) {

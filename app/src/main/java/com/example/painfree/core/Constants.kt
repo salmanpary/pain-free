@@ -7,10 +7,10 @@ import com.example.painfree.ui.theme.*
 
 object Constants {
     // Background Colors
-    val BACKGROUND_GRADIENT = listOf(Slate950, Indigo950, Indigo900)
-    val ACCENT_GRADIENT = listOf(Sky400, Purple400)
-    val WHATSAPP_GRADIENT = listOf(WhatsAppGreen, WhatsAppDarkGreen)
-    val LOADER_COLOR = Sky400
+    val BACKGROUND_GRADIENT = listOf(PeachBg, PeachBg)
+    val ACCENT_GRADIENT = listOf(CoralPink, GoldenYellow)
+    val WHATSAPP_GRADIENT = listOf(CoralPink, GoldenYellow)
+    val LOADER_COLOR = CoralPink
 
     // Contact Info
     const val WHATSAPP_URL = "https://wa.me/919605922507?text=Hello,%20I%20need%20help%20with%20personal%20training"
