@@ -13,7 +13,7 @@ If you choose to use my Service, then you agree to the collection and use of inf
 For a better experience, while using our Service, I do not require you to provide us with any personally identifiable information. The app provides exercise instructions and links to recovery resources.
 
 ### WhatsApp Contact
-The app includes a "Contact for Personal Training" button that opens WhatsApp. By clicking this, you voluntarily initiate a conversation. We do not store your phone number or messages within the app itself; any interaction happens through WhatsApp's platform.
+The app includes a "Contact for Personal Training" button that opens WhatsApp. By clicking this, you voluntarily initiate a conversation. Please note that personal training services requested via this contact are professional services provided for a fee. We do not store your phone number or messages within the app itself; any interaction happens through WhatsApp's platform.
 
 ### Firebase and Firestore
 We use Google Firebase (Firestore) to host exercise data and instructions. These services may collect certain standard usage data (like device IDs or crash logs) to help us improve the app.
