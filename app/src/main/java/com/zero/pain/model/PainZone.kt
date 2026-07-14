@@ -1,4 +1,4 @@
-package com.example.painfree.model
+package com.zero.pain.model
 
 data class PainZone(
     val docId: String,

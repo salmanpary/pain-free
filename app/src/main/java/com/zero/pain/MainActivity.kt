@@ -1,4 +1,4 @@
-package com.example.painfree
+package com.zero.pain
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -20,14 +20,14 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.painfree.core.Constants
-import com.example.painfree.data.PainRepository
-import com.example.painfree.model.Screen
-import com.example.painfree.ui.components.ModernLoadingOverlay
-import com.example.painfree.ui.components.SimpleWhatsAppButton
-import com.example.painfree.ui.screens.PainSelectionScreen
-import com.example.painfree.ui.screens.StretchDetailScreen
-import com.example.painfree.ui.theme.*
+import com.zero.pain.core.Constants
+import com.zero.pain.data.PainRepository
+import com.zero.pain.model.Screen
+import com.zero.pain.ui.components.ModernLoadingOverlay
+import com.zero.pain.ui.components.SimpleWhatsAppButton
+import com.zero.pain.ui.screens.PainSelectionScreen
+import com.zero.pain.ui.screens.StretchDetailScreen
+import com.zero.pain.ui.theme.*
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {

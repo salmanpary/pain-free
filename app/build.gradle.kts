@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.painfree"
+    namespace = "com.zero.pain"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.painfree"
+        applicationId = "com.zero.pain"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

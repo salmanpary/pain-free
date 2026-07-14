@@ -1,4 +1,4 @@
-package com.example.painfree.ui.theme
+package com.zero.pain.ui.theme
 
 import android.app.Activity
 import android.os.Build

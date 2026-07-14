@@ -1,4 +1,4 @@
-package com.example.painfree.ui.components
+package com.zero.pain.ui.components
 
 import android.view.TextureView
 import android.view.ViewGroup
@@ -23,7 +23,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.AspectRatioFrameLayout
-import com.example.painfree.core.VideoCache
+import com.zero.pain.core.VideoCache
 
 @OptIn(UnstableApi::class)
 @Composable

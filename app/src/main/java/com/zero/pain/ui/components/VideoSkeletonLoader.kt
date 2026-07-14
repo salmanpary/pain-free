@@ -1,4 +1,4 @@
-package com.example.painfree.ui.components
+package com.zero.pain.ui.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -13,8 +13,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.painfree.core.Constants
-import com.example.painfree.ui.theme.*
+import com.zero.pain.core.Constants
+import com.zero.pain.ui.theme.*
 
 @Composable
 fun VideoSkeletonLoader() {

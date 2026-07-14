@@ -1,4 +1,4 @@
-package com.example.painfree.model
+package com.zero.pain.model
 
 sealed class Screen {
     object Selection : Screen()

@@ -1,4 +1,4 @@
-package com.example.painfree.ui.theme
+package com.zero.pain.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

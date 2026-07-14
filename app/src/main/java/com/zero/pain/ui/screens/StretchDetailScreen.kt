@@ -1,4 +1,4 @@
-package com.example.painfree.ui.screens
+package com.zero.pain.ui.screens
 
 import android.os.Build.VERSION.SDK_INT
 import androidx.activity.compose.BackHandler
@@ -43,11 +43,11 @@ import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import com.example.painfree.core.Constants
-import com.example.painfree.ui.components.NavigationButton
-import com.example.painfree.ui.components.VideoPlayer
-import com.example.painfree.ui.components.VideoSkeletonLoader
-import com.example.painfree.ui.theme.*
+import com.zero.pain.core.Constants
+import com.zero.pain.ui.components.NavigationButton
+import com.zero.pain.ui.components.VideoPlayer
+import com.zero.pain.ui.components.VideoSkeletonLoader
+import com.zero.pain.ui.theme.*
 import kotlinx.coroutines.launch
 
 @Composable

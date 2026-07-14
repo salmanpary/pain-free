@@ -1,4 +1,4 @@
-package com.example.painfree.ui.components
+package com.zero.pain.ui.components
 
 import android.content.Intent
 import androidx.compose.animation.core.*
@@ -25,9 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
-import com.example.painfree.R
-import com.example.painfree.core.Constants
-import com.example.painfree.ui.theme.*
+import com.zero.pain.R
+import com.zero.pain.core.Constants
+import com.zero.pain.ui.theme.*
 
 @Composable
 fun SimpleWhatsAppButton(modifier: Modifier = Modifier) {

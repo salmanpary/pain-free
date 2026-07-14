@@ -1,4 +1,4 @@
-package com.example.painfree.core
+package com.zero.pain.core
 
 import android.content.Context
 import androidx.annotation.OptIn

@@ -1,4 +1,4 @@
-package com.example.painfree.ui.screens
+package com.zero.pain.ui.screens
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
@@ -23,9 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.painfree.R
-import com.example.painfree.core.Constants
-import com.example.painfree.ui.theme.*
+import com.zero.pain.R
+import com.zero.pain.core.Constants
+import com.zero.pain.ui.theme.*
 
 @Composable
 fun PainSelectionScreen(onPainClick: (String) -> Unit) {

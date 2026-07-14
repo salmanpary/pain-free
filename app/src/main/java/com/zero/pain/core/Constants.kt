@@ -1,9 +1,9 @@
-package com.example.painfree.core
+package com.zero.pain.core
 
-import com.example.painfree.R
-import com.example.painfree.model.PainZone
+import com.zero.pain.R
+import com.zero.pain.model.PainZone
 
-import com.example.painfree.ui.theme.*
+import com.zero.pain.ui.theme.*
 
 object Constants {
     // Background Colors
@@ -13,7 +13,7 @@ object Constants {
     val LOADER_COLOR = CoralPink
 
     // Contact Info
-    const val WHATSAPP_URL = "https://wa.me/919605922507?text=Hello,%20I%20need%20help%20with%20personal%20training"
+    const val WHATSAPP_URL = "https://wa.me/919605922507?text=Hi,%20I'm%20interested%20in%20learning%20more%20about%20your%20personal%20training%20services."
     const val WHATSAPP_BUTTON_TEXT = "Contact for Personal Training"
 
     // UI Text

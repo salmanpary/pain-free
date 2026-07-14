@@ -1,8 +1,8 @@
-package com.example.painfree.data
+package com.zero.pain.data
 
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
-import com.example.painfree.core.Constants
+import com.zero.pain.core.Constants
 import com.google.firebase.firestore.toObject
 
 /**

@@ -1,4 +1,4 @@
-package com.example.painfree.ui.components
+package com.zero.pain.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -16,8 +16,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.painfree.core.Constants
-import com.example.painfree.ui.theme.*
+import com.zero.pain.core.Constants
+import com.zero.pain.ui.theme.*
 
 @Composable
 fun ModernLoadingOverlay(isLoading: Boolean) {
