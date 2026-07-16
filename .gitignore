@@ -4,6 +4,10 @@ gen/
 out/
 build/
 .gradle/
+*.aab
+*.apk
+*.ap_
+*.der
 
 # Local configuration files
 local.properties
