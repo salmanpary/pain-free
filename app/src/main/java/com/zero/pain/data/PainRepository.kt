@@ -1,5 +1,6 @@
 package com.zero.pain.data
 
+import androidx.annotation.Keep
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import com.zero.pain.core.Constants
@@ -8,6 +9,7 @@ import com.google.firebase.firestore.toObject
 /**
  * Domain model used by the UI.
  */
+@Keep
 data class PainData(
     val mainTitle: String,
     val gifUrls: List<String>,
@@ -20,6 +22,7 @@ data class PainData(
  * Firestore DTO (Data Transfer Object) matching the database structure.
  * Standard practice is to provide default null values for automatic deserialization.
  */
+@Keep
 data class GifEntry(
     val url: String? = null,
     val instructions: List<String>? = null,
@@ -28,6 +31,7 @@ data class GifEntry(
     val dimensions: String? = null
 )
 
+@Keep
 data class PainDoc(
     val title: String? = null,
     val name: String? = null,

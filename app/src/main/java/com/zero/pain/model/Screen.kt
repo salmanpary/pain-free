@@ -1,8 +1,11 @@
 package com.zero.pain.model
 
+import androidx.annotation.Keep
+
 sealed class Screen {
     object Selection : Screen()
     
+    @Keep
     data class StretchDetailState(
         val painId: String,
         val mainTitle: String,
